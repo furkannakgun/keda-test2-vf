@@ -1,0 +1,25 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  name: tzl-shrd
+  demands:
+    - agent.name -equals tzl-poc-ado-778d964b76-77rbn
+
+steps:
+- checkout: self
+
+- task: Kubernetes@1
+  inputs:
+    connectionType: 'Kubernetes Service Connection'
+    kubernetesServiceEndpoint: 'tzlpoc'
+    namespace: 'default'
+    command: 'apply'
+    arguments: '-f keda-scaledobject.yaml'
+    secretType: 'dockerRegistry'
+    containerRegistryType: 'Azure Container Registry'
