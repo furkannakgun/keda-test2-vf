@@ -6,26 +6,26 @@ metadata:
 spec:
   secretTargetRef:
   - parameter: personalAccessToken
-    name: pipeline-auth
+    name: azure-devops-agent-keda
     key: AZP_TOKEN
   - parameter: organizationURL
-    name: pipeline-auth
+    name: azure-devops-agent-keda
     key: AZP_URL
 ---
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: agent-scaler
+  name: agent-keda-scaler
   namespace: default
 spec:
   scaleTargetRef:
-    name: keda-deployment
+    name: tzl-poc-ado
   minReplicaCount: 3
   maxReplicaCount: 5
   triggers:
     - type: azure-pipelines
       metadata:
-        poolID: "17"
+        poolID: "19"
         organizationURLFromEnv: "AZP_URL"
         personalAccessTokenFromEnv: "AZP_TOKEN"    
       authenticationRef:
